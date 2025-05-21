@@ -2,10 +2,16 @@ package com.example;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import javax.swing.JFrame;
+
+import com.example.GameApplication;
 
 public class AppTest {
-    @Test
+
+	@Test
     public void testApp() {
-        assertTrue(true);
+		JFrame frame = new JFrame();
+		frame.setSize(540,250);
+		frame.setVisible(true);
     }
 }
