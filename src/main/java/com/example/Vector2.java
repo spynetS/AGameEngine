@@ -106,8 +106,8 @@ public class Vector2 {
 
     public Vector2 getNormalized()
     {
-        if(getHighest()!=0)
-            return divide(getHighest());
+        if(getMagnitude()!=0)
+            return divide(getMagnitude());
         return Vector2.zero;
     }
 

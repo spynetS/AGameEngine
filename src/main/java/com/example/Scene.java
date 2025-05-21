@@ -8,6 +8,11 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
@@ -17,6 +22,7 @@ import javax.swing.JPanel;
 
 import com.example.components.*;
 import com.example.ecs.*;
+import com.example.input.*;
 
 public class Scene extends JPanel implements Runnable {
 
@@ -33,6 +39,71 @@ public class Scene extends JPanel implements Runnable {
     public Scene(GameApplication application){
         this.application = application;
         setDoubleBuffered(true); // helps prevent flickering
+        initInput();
+    }
+
+    private void initInput(){
+        setLayout(new GridLayout(0, 1));
+        setBackground(Color.WHITE);
+        setFocusable(true);
+
+
+        addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                Input.addKey(e);
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                Input.removeKey(e);
+            }
+        });
+
+        /*
+          mouse input
+         */
+        MouseAdapter mouseAdapter = new MouseAdapter(){
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                Input.addMouseButton(e);
+                Input.setMouseEvent(e);
+                Input.setMousePressed(e.getButton());
+                requestFocus();
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                Input.removeMouseButton(e);
+                Input.setMouseEvent(e);
+
+            }
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+                Input.setMousePositionOnCanvas(new Vector2((float) e.getPoint().getX(), (float) e.getPoint().getY()));
+                Input.setMouseEvent(e);
+
+            }
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                super.mouseMoved(e);
+                Input.setMousePositionOnCanvas(new Vector2((float) e.getPoint().getX(), (float) e.getPoint().getY()));
+                Input.setMouseEvent(e);
+                requestFocus();
+            }
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                Input.setScrollValue((float) e.getPreciseWheelRotation());
+                Input.setMouseEvent(e);
+            }
+
+        };
+        addMouseListener(mouseAdapter);
+        addMouseMotionListener(mouseAdapter);
+        addMouseWheelListener(mouseAdapter);
     }
 
     public ECS getEcs(){return ecs;}
@@ -79,12 +150,18 @@ public class Scene extends JPanel implements Runnable {
             Transform t = ecs.getComponent(entityId, Transform.class);
             Renderer r = ecs.getComponent(entityId, Renderer.class);
 
-            g2.fill(new Rectangle2D.Double(t.position.getX(),t.position.getY(),t.scale.getX(),t.scale.getY()));
-            //g2.fillRect((int)t.position.getX(),(int)t.position.getY(),(int)t.scale.getX(),(int)t.scale.getY());
+            double w = t.scale.getX();
+            double h = t.scale.getY();
+
+
+            g2.fill(new Rectangle2D.Double(t.position.getX()-(w/2),t.position.getY()-(h/2),w,h));
         }
     }
 
     public void start() {
+        for(Script script : ecs.getAllComponentsOfType(Script.class)){
+            script.start();
+        }
 
         running = true;
         gameThread = new Thread(this);

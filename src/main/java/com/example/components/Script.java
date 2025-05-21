@@ -19,9 +19,11 @@ public class Script extends Component{
         this.gameObject = gameObject;
     }
 
+    public void start(){
+
+    }
+
     public void update(double deltaTime){
-        Transform t = gameObject.getComponent(Transform.class);
-        t.position = t.position.add(new Vector2(10*deltaTime,0));
 
     }
 }

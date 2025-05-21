@@ -8,21 +8,24 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ECS {
     private Map<Class<? extends Component>, Map<Integer, Component>> componentStores = new ConcurrentHashMap<>();
-    Map<Integer, Script> scripts = new HashMap<>();
+    Map<Integer, List<Script>> scripts = new HashMap<>();
+
 
     public <T extends Component> void addComponent(int entityId, T component) {
         if(component instanceof Script){
-            scripts.put(entityId,(Script)component);
+            scripts.computeIfAbsent(entityId, k -> new ArrayList<>()).add((Script) component);
         }
         else{
             componentStores.computeIfAbsent(component.getClass(), k -> new HashMap<>()).put(entityId, component);
         }
 
     }
-
+    public List<Script> getScripts(int entityId) {
+        return scripts.getOrDefault(entityId, Collections.emptyList());
+    }
     public <T extends Component> T getComponent(int entityId, Class<T> compClass) {
         if(Script.class.isAssignableFrom(compClass)){
-            return (T) scripts.get(entityId);
+            return (T) scripts.get(entityId).get(0);
         }
 
         Map<Integer, Component> store = componentStores.get(compClass);
@@ -31,8 +34,16 @@ public class ECS {
     }
 
     public <T extends Component> Collection<T> getAllComponentsOfType(Class<T> componentClass) {
-        if(Script.class.isAssignableFrom(componentClass)){
-            return (Collection<T>) scripts.values();
+        if (Script.class.isAssignableFrom(componentClass)) {
+            // Flatten all scripts from all entities into a single list
+            List<T> allScripts = new ArrayList<>();
+            for (List<Script> scriptList : scripts.values()) {
+                for (Script script : scriptList) {
+                    // Cast safe because script extends Script which is assignable from componentClass
+                    allScripts.add(componentClass.cast(script));
+                }
+            }
+            return allScripts;
         }
         Map<Integer, Component> store = componentStores.get(componentClass);
         if (store == null) {
