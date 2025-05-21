@@ -13,6 +13,12 @@ public class Zombie extends Script {
         this.target = target;
     }
 
+    public void start(){
+        Transform t2 = gameObject.getComponent(Transform.class);
+        t2.scale = new Vector2(20,20);
+    }
+
+
     @Override
     public void update(double deltaTime) {
         Transform t1 = target.getComponent(Transform.class);

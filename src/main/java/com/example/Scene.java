@@ -119,7 +119,7 @@ public class Scene extends JPanel implements Runnable {
         // Calculate uniform scale to fit design inside panel
         double scaleX = (double) w / designWidth;
         double scaleY = (double) h / designHeight;
-        double scale = Math.min(scaleX, scaleY)*0.5;
+        double scale = Math.min(scaleX, scaleY)*0.3;
 
         // Move origin to center of panel
         g2.translate(w / 2.0+cameraPosition.getX(),
@@ -203,7 +203,7 @@ public class Scene extends JPanel implements Runnable {
                 fpsTimer += 1000;
             }
             try {
-                Thread.sleep(1); // Give the CPU a breath
+                Thread.sleep(12); // Give the CPU a breath
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
