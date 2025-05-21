@@ -23,7 +23,8 @@ public class ECS {
     }
     public <T extends Component> T getComponent(int entityId, Class<T> compClass) {
         if(Script.class.isAssignableFrom(compClass)){
-            return (T) scripts.get(entityId).get(0);
+            if (scripts.get(entityId)!=null)
+                return (T) scripts.get(entityId).get(0);
         }
 
         Map<Integer, Component> store = componentStores.get(compClass);

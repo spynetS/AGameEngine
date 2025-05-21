@@ -26,4 +26,8 @@ public class Script extends Component{
     public void update(double deltaTime){
 
     }
+
+    public void onCollision(int entity){
+
+    }
 }

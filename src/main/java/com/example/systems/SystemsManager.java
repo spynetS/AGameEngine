@@ -12,7 +12,7 @@ public class SystemsManager {
         // Register systems
         systems.add(new ColliderSystem());
         systems.add(new RendererSystem());
-        systems.add(new RigidBodySystem());
+        systems.add(new RigidbodySystem());
     }
 
     public ArrayList<ISystem> getSystems() {

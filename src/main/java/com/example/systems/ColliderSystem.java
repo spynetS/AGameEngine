@@ -14,6 +14,17 @@ import java.util.Set;
 import com.example.components.*;
 
 public class ColliderSystem implements ISystem {
+
+    public void onCollision(ECS ecs, int entityA, int entityB) {
+
+        Script scriptA = ecs.getComponent(entityA, Script.class);
+        if (scriptA != null) scriptA.onCollision(entityB);
+
+        Script scriptB = ecs.getComponent(entityB, Script.class);
+        if (scriptB != null) scriptB.onCollision(entityA);
+    }
+
+
     @Override
     public void update(Scene scene) {
         ECS ecs = scene.getEcs();
@@ -32,6 +43,13 @@ public class ColliderSystem implements ISystem {
 
                 r1.isColliding = shape1.intersects(shape2);
                 r2.isColliding = shape2.intersects(shape1);
+
+                if(r1.isColliding){
+                    onCollision(ecs, entityId, entityId2);
+                    r1.collisionEntity = entityId2;
+                    r2.collisionEntity = entityId;
+                }
+
 
             }
         }

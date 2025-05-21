@@ -120,7 +120,7 @@ public class Scene extends JPanel implements Runnable {
         // Calculate uniform scale to fit design inside panel
         double scaleX = (double) w / designWidth;
         double scaleY = (double) h / designHeight;
-        double scale = Math.min(scaleX, scaleY)*0.3;
+        double scale = Math.min(scaleX, scaleY)*0.5;
 
         // Move origin to center of panel
         g2.translate(w / 2.0+cameraPosition.getX(),

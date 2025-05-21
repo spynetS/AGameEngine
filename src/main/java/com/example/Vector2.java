@@ -9,7 +9,7 @@ public class Vector2 {
     public static Vector2 right = new Vector2(1,0);
     public static Vector2 left = new Vector2(-1,0);
     public static Vector2 zero = new Vector2(0,0);
-    private double x,y,z;
+    public double x,y,z;
 
     public Vector2() {
         x = 0;

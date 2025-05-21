@@ -1,5 +1,6 @@
 package com.example.components;
 
+import com.example.Debug;
 import com.example.GameObject;
 import com.example.Scene;
 import com.example.Vector2;
@@ -12,10 +13,10 @@ public class Movement extends Script{
     public void update(double deltaTime){
 //        Transform t = gameObject.getComponent(Transform.class);
         Vector2 dir = Vector2.zero;
-        RigidBody rb = gameObject.getComponent(RigidBody.class);
+        Rigidbody rb = gameObject.getComponent(Rigidbody.class);
 
         if(Input.isKeyDown(Keys.W))
-            dir = dir.add(Vector2.up);
+            dir = dir.add(Vector2.up.multiply(1));
 
         if(Input.isKeyDown(Keys.S))
             dir = dir.add(Vector2.down);
@@ -25,12 +26,7 @@ public class Movement extends Script{
         if(Input.isKeyDown(Keys.D))
             dir = dir.add(Vector2.right);
 
-        if(Input.isKeyDown(Keys.SPACE))
-            gameObject.getComponent(Collider.class).w++;
-
-        rb.addForce(dir.multiply(30));
-
-
-
+        rb.addForce(dir.multiply(5));
     }
+
 }
