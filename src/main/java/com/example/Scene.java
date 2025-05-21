@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 import com.example.components.*;
 import com.example.ecs.*;
 import com.example.input.*;
+import com.example.input.*;
+import com.example.systems.*;
 
 public class Scene extends JPanel implements Runnable {
 
@@ -33,6 +35,7 @@ public class Scene extends JPanel implements Runnable {
     private Vector2 cameraPosition = new Vector2(0,0);
 
     private ECS ecs = new ECS();
+    private SystemsManager manager = new SystemsManager();
 
 
 
@@ -61,9 +64,7 @@ public class Scene extends JPanel implements Runnable {
             }
         });
 
-        /*
-          mouse input
-         */
+
         MouseAdapter mouseAdapter = new MouseAdapter(){
             @Override
             public void mousePressed(MouseEvent e) {
@@ -144,18 +145,8 @@ public class Scene extends JPanel implements Runnable {
         //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         initGraphics2D(g2);
 
+        manager.renderSystems(this,g2);
 
-        Set<Integer> entities = ecs.getEntitiesWithComponents(Transform.class, Renderer.class);
-        for (int entityId : entities) {
-            Transform t = ecs.getComponent(entityId, Transform.class);
-            Renderer r = ecs.getComponent(entityId, Renderer.class);
-
-            double w = t.scale.getX();
-            double h = t.scale.getY();
-
-
-            g2.fill(new Rectangle2D.Double(t.position.getX()-(w/2),t.position.getY()-(h/2),w,h));
-        }
     }
 
     public void start() {
@@ -169,12 +160,12 @@ public class Scene extends JPanel implements Runnable {
     }
 
     public void update(double deltaTime){
-
+        Time.deltaTime = deltaTime;
         for(Script script : ecs.getAllComponentsOfType(Script.class)){
             script.update(deltaTime);
         }
 
-
+        manager.updateSystems(this);
 
         Toolkit.getDefaultToolkit().sync();
         validate();
@@ -197,8 +188,8 @@ public class Scene extends JPanel implements Runnable {
 
             frames++;
             if (System.currentTimeMillis() - fpsTimer >= 1000) {
-                System.out.println("DeltaTime: "+deltaTime);
-                System.out.println("FPS: " + frames);
+//                System.out.println("DeltaTime: "+deltaTime);
+//                System.out.println("FPS: " + frames);
                 frames = 0;
                 fpsTimer += 1000;
             }

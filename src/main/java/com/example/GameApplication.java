@@ -10,8 +10,9 @@ public class GameApplication extends JFrame{
 
 
     public GameApplication(){
-		this.setSize(540,420);
+		this.setSize(840,520);
 		this.setVisible(true);
+		System.setProperty("sun.java2d.opengl", "true");
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSelectedScene(new Scene(this));
@@ -22,8 +23,5 @@ public class GameApplication extends JFrame{
 		add(newScene, java.awt.BorderLayout.CENTER);
 		newScene.start();
 	}
-
-
-
 
 }

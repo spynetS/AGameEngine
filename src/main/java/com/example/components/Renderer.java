@@ -6,6 +6,6 @@ import java.awt.Shape;
 
 public class Renderer extends Component {
 
-    public Color color = Color.GRAY;
+    public Color color = Color.darkGray;
 
 }

@@ -10,8 +10,9 @@ import com.example.input.Keys;
 public class Movement extends Script{
 
     public void update(double deltaTime){
-        Transform t = gameObject.getComponent(Transform.class);
+//        Transform t = gameObject.getComponent(Transform.class);
         Vector2 dir = Vector2.zero;
+        RigidBody rb = gameObject.getComponent(RigidBody.class);
 
         if(Input.isKeyDown(Keys.W))
             dir = dir.add(Vector2.up);
@@ -24,11 +25,12 @@ public class Movement extends Script{
         if(Input.isKeyDown(Keys.D))
             dir = dir.add(Vector2.right);
 
-        if(Input.isKeyPressed(Keys.SPACE))
-            t.scale = t.scale.multiply(2);
+        if(Input.isKeyDown(Keys.SPACE))
+            gameObject.getComponent(Collider.class).w++;
+
+        rb.addForce(dir.multiply(30));
 
 
-        t.position = t.position.add(new Vector2(dir.getNormalized().multiply(deltaTime).multiply(200)));
 
     }
 }

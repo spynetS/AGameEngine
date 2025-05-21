@@ -5,11 +5,9 @@ import com.example.components.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 public class ECS {
     private Map<Class<? extends Component>, Map<Integer, Component>> componentStores = new ConcurrentHashMap<>();
     Map<Integer, List<Script>> scripts = new HashMap<>();
-
 
     public <T extends Component> void addComponent(int entityId, T component) {
         if(component instanceof Script){
