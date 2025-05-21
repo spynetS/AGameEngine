@@ -28,4 +28,8 @@ Thumbs.db
 
 # Ignore libs if you don't want to commit dependencies
 /lib/
-/.settings/org.eclipse.jdt.core.prefs
+
+
+.project
+.classpath
+/.settings/
