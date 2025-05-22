@@ -25,7 +25,7 @@ public class App extends GameApplication {
 			Rigidbody r = new Rigidbody();
 			addComponent(r);
 			r.mass = 1;
-			r.friction = 0.5;
+			r.friction = 0.005;
 
 		}
 	}

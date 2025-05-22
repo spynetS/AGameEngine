@@ -70,7 +70,7 @@ public class RigidbodySystem implements ISystem{
                                       ecs.getComponent(c.collisionEntity, Collider.class));
             }
 
-            //rb.velocity = rb.velocity.multiply(1-rb.friction);
+            rb.velocity = rb.velocity.multiply(1-rb.friction);
             rb.velocity = rb.velocity.add(rb.acceleration.multiply(Time.deltaTime));
 
 
