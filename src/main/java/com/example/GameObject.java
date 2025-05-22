@@ -4,21 +4,23 @@ import com.example.components.*;
 
 public class GameObject {
     private int id = 0;
-    private Scene owner;
+    public Scene scene;
 
-    public GameObject(Scene owner, int id){
-        this.owner = owner;
-        this.id = id;
+    public GameObject(Scene scene){
+        this.scene = scene;
+        this.id = scene.getEntityId();
+        addComponent(new Transform());
     }
 
-    public void addComponent(Component component){
+    public Component addComponent(Component component){
         if (component instanceof Script) {
             ((Script) component).initScript(this);
         }
-        this.owner.getEcs().addComponent(id, component);
+        this.scene.getEcs().addComponent(id, component);
+        return component;
     }
     public <T extends Component> T getComponent(Class<T> comp){
-        return this.owner.getEcs().getComponent(id, comp);
+        return this.scene.getEcs().getComponent(id, comp);
     }
 
 

@@ -161,13 +161,18 @@ public class Scene extends JPanel implements Runnable {
         Input.setMousePosition(screenToWorld(Input.getMousePositionOnCanvas()));
 
         manager.renderSystems(this,g2);
-
+        g2.scale(2,2);
+        g2.drawString(String.valueOf(entityId),-200,-200);
+        Debug.log(entityId);
     }
 
+    public int getEntityId(){
+        return entityId;
+    }
+
+    
     public GameObject createGameObject(){
-        GameObject ob = new GameObject(this,entityId);
-        entityId++;
-        ob.addComponent(new Transform());
+        GameObject ob = new GameObject(this);
         return ob;
     }
 
@@ -212,13 +217,13 @@ public class Scene extends JPanel implements Runnable {
 
             frames++;
             if (System.currentTimeMillis() - fpsTimer >= 1000) {
-                System.out.println("DeltaTime: "+deltaTime);
-                System.out.println("FPS: " + frames);
+
+                application.setTitle(String.valueOf(frames));
                 frames = 0;
                 fpsTimer += 1000;
             }
             try {
-                Thread.sleep(12); // Give the CPU a breath
+                Thread.sleep(1); // Give the CPU a breath
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

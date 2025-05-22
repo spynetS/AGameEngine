@@ -34,10 +34,10 @@ public class Movement extends Script{
 
         }
         else{
-            t.position = Input.getMousePosition();
+            dir = t.position.lookAt(Input.getMousePosition());
         }
 
-        rb.addForce(dir.multiply(5));
+        rb.addForce(dir.multiply(50));
     }
 
 }

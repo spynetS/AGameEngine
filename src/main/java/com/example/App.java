@@ -1,6 +1,7 @@
 package com.example;
 
 import java.awt.Color;
+import java.util.Random;
 
 import com.example.components.*;
 
@@ -11,21 +12,22 @@ public class App extends GameApplication {
 		//app.setTitle("Mitt Spel");
 		Scene scene = new Scene(app);
 
-		GameObject ob = scene.createGameObject();
-		SpriteRenderer r = new SpriteRenderer();
-		ob.addComponent(r);
-		r.addSprite(new Sprite("src/main/resources/eric.png"), 0);
-		r.addSprite(new Sprite("src/main/resources/hansuck.jpg"), 0);
-
-
-		ob.getComponent(Transform.class).scale = new Vector2(500,500);
-		//ob.addComponent(new ShapeRenderer());
-
-
-		ob.addComponent(new Movement(true));
-		ob.addComponent(new Rigidbody(false));
+		TestObject t = new TestObject(scene);
 
 		app.setSelectedScene(scene);
+	}
+
+	public static class TestObject extends GameObject{
+		public TestObject(Scene scene){
+			super(scene);
+			addComponent(new ShapeRenderer());
+			addComponent(new Movement(true));
+			Rigidbody r = new Rigidbody();
+			addComponent(r);
+			r.mass = 1;
+			r.friction = 0.5;
+
+		}
 	}
 
 }

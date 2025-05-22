@@ -11,7 +11,6 @@ public class ECS {
     Map<Integer, List<Script>> scripts = new HashMap<>();
 
     public <T extends Component> void addComponent(int entityId, T component) {
-        Debug.log("Add component");
         if(component instanceof Script){
             scripts.computeIfAbsent(entityId, k -> new ArrayList<>()).add((Script) component);
         }
