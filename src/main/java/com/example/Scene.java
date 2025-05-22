@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import com.example.components.*;
 import com.example.ecs.*;
@@ -38,6 +39,7 @@ public class Scene extends JPanel implements Runnable {
     private SystemsManager manager = new SystemsManager();
 
 
+    public Scene(){}
 
     public Scene(GameApplication application){
         this.application = application;
@@ -46,76 +48,94 @@ public class Scene extends JPanel implements Runnable {
     }
 
     private void initInput(){
-        setLayout(new GridLayout(0, 1));
+        //setLayout(new GridLayout(0, 1));
         setBackground(Color.WHITE);
-        setFocusable(true);
+       setFocusable(true);
 
 
-        addKeyListener(new KeyAdapter(){
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
-                Input.addKey(e);
-            }
-            @Override
-            public void keyReleased(KeyEvent e) {
-                super.keyReleased(e);
-                Input.removeKey(e);
-            }
-        });
+       addKeyListener(new KeyAdapter(){
+               @Override
+       public void keyPressed(KeyEvent e) {
+           super.keyPressed(e);
+       Input.addKey(e);
+       }
+               @Override
+       public void keyReleased(KeyEvent e) {
+           super.keyReleased(e);
+       Input.removeKey(e);
+       }
+           });
 
 
-        MouseAdapter mouseAdapter = new MouseAdapter(){
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                Input.addMouseButton(e);
-                Input.setMouseEvent(e);
-                Input.setMousePressed(e.getButton());
-                requestFocus();
-            }
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
-                Input.removeMouseButton(e);
-                Input.setMouseEvent(e);
+       MouseAdapter mouseAdapter = new MouseAdapter(){
+               @Override
+       public void mousePressed(MouseEvent e) {
+           super.mousePressed(e);
+       Input.addMouseButton(e);
+       Input.setMouseEvent(e);
+       Input.setMousePressed(e.getButton());
+       requestFocus();
+       }
+               @Override
+       public void mouseReleased(MouseEvent e) {
+           super.mouseReleased(e);
+       Input.removeMouseButton(e);
+       Input.setMouseEvent(e);
 
-            }
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                super.mouseDragged(e);
-                Input.setMousePositionOnCanvas(new Vector2((float) e.getPoint().getX(), (float) e.getPoint().getY()));
-                Input.setMouseEvent(e);
+       }
+               @Override
+       public void mouseDragged(MouseEvent e) {
+           super.mouseDragged(e);
+       Input.setMousePositionOnCanvas(new Vector2((float) e.getPoint().getX(), (float) e.getPoint().getY()));
+       Input.setMouseEvent(e);
 
-            }
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                super.mouseMoved(e);
-                Input.setMousePositionOnCanvas(new Vector2((float) e.getPoint().getX(), (float) e.getPoint().getY()));
-                Input.setMouseEvent(e);
-                requestFocus();
-            }
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                Input.setScrollValue((float) e.getPreciseWheelRotation());
-                Input.setMouseEvent(e);
-            }
+       }
+               @Override
+       public void mouseMoved(MouseEvent e) {
+           super.mouseMoved(e);
+       Input.setMousePositionOnCanvas(new Vector2((float) e.getPoint().getX(), (float) e.getPoint().getY()));
+       Input.setMouseEvent(e);
+       requestFocus();
+       }
+               @Override
+       public void mouseWheelMoved(MouseWheelEvent e) {
+           Input.setScrollValue((float) e.getPreciseWheelRotation());
+       Input.setMouseEvent(e);
+       }
 
-        };
-        addMouseListener(mouseAdapter);
-        addMouseMotionListener(mouseAdapter);
-        addMouseWheelListener(mouseAdapter);
+           };
+       addMouseListener(mouseAdapter);
+       addMouseMotionListener(mouseAdapter);
+       addMouseWheelListener(mouseAdapter);
     }
 
     public ECS getEcs(){return ecs;}
+    public Vector2 screenToWorld(Vector2 mousePoint) {
+        int w = application.getWidth();
+        int h = application.getHeight();
+
+        int designWidth = 1920;
+        int designHeight = 1080;
+        double scaleX = (double) w / designWidth;
+        double scaleY = (double) h / designHeight;
+        double scale = Math.min(scaleX, scaleY) * 0.5;
+
+        double tx = w / 2.0 + cameraPosition.getX();
+        double ty = h / 2.0 + cameraPosition.getY();
+
+        double wx = (mousePoint.getX() - tx) / scale;
+        double wy = (mousePoint.getY() - ty) / scale;
+
+        return new Vector2(wx, wy);
+    }
 
     private void initGraphics2D(Graphics2D g2){
 
-        int w = getWidth();
-        int h = getHeight();
+        int w = application.getWidth();
+        int h = application.getHeight();
 
-        int designWidth = 400;
-        int designHeight = 300;
+        int designWidth = 1920;
+        int designHeight = 1080;
 
         // Calculate uniform scale to fit design inside panel
         double scaleX = (double) w / designWidth;
@@ -130,23 +150,25 @@ public class Scene extends JPanel implements Runnable {
         g2.scale(scale, scale);
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D) g;
+        //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        initGraphics2D(g2);
+
+        Input.setMousePosition(screenToWorld(Input.getMousePositionOnCanvas()));
+
+        manager.renderSystems(this,g2);
+
+    }
+
     public GameObject createGameObject(){
         GameObject ob = new GameObject(this,entityId);
         entityId++;
         ob.addComponent(new Transform());
         return ob;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        // TODO Auto-generated method stub
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        initGraphics2D(g2);
-
-        manager.renderSystems(this,g2);
-
     }
 
     public void start() {
@@ -165,7 +187,10 @@ public class Scene extends JPanel implements Runnable {
             script.update(deltaTime);
         }
 
+
         manager.updateSystems(this);
+
+
 
         Toolkit.getDefaultToolkit().sync();
         validate();
@@ -184,12 +209,11 @@ public class Scene extends JPanel implements Runnable {
             lastTime = now;
 
             update(deltaTime);
-            repaint();
 
             frames++;
             if (System.currentTimeMillis() - fpsTimer >= 1000) {
-//                System.out.println("DeltaTime: "+deltaTime);
-//                System.out.println("FPS: " + frames);
+                System.out.println("DeltaTime: "+deltaTime);
+                System.out.println("FPS: " + frames);
                 frames = 0;
                 fpsTimer += 1000;
             }

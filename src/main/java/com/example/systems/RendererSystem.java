@@ -7,7 +7,10 @@ import com.example.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.List;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Set;
 
 import com.example.components.*;
@@ -23,18 +26,21 @@ public class RendererSystem implements ISystem {
     public void render(Scene scene, Graphics2D g2) {
         ECS ecs = scene.getEcs();
 
-        Set<Integer> entities = ecs.getEntitiesWithComponents(Transform.class, Renderer.class);
+        Set<Integer> entities = ecs.getEntitiesWithComponents(Transform.class, ShapeRenderer.class);
+
+
         for (int entityId : entities) {
-            Transform t = ecs.getComponent(entityId, Transform.class);
-            Renderer r = ecs.getComponent(entityId, Renderer.class);
+           Transform t = ecs.getComponent(entityId, Transform.class);
+           ShapeRenderer r = ecs.getComponent(entityId, ShapeRenderer.class);
 
-            double w = t.scale.getX();
-            double h = t.scale.getY();
+           double w = t.scale.getX();
+           double h = t.scale.getY();
 
-            Color c = g2.getColor();
-            g2.setColor(r.color);
-            g2.fill(new Rectangle2D.Double(t.position.getX()-(w/2),t.position.getY()-(h/2),w,h));
-            g2.setColor(c);
+            g2.fill(new Rectangle2D.Double(
+                                           t.position.getX() - (w / 2),
+                                           t.position.getY() - (h / 2),
+                                           w, h
+                                           ));
 
         }
 

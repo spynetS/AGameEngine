@@ -49,8 +49,6 @@ public class ColliderSystem implements ISystem {
                     r1.collisionEntity = entityId2;
                     r2.collisionEntity = entityId;
                 }
-
-
             }
         }
     }

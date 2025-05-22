@@ -10,21 +10,32 @@ import com.example.input.Keys;
 
 public class Movement extends Script{
 
+    boolean mouse = false;
+    public Movement(boolean mouse){
+        this.mouse = mouse;
+    }
+
     public void update(double deltaTime){
-//        Transform t = gameObject.getComponent(Transform.class);
+        Transform t = gameObject.getComponent(Transform.class);
         Vector2 dir = Vector2.zero;
         Rigidbody rb = gameObject.getComponent(Rigidbody.class);
 
-        if(Input.isKeyDown(Keys.W))
-            dir = dir.add(Vector2.up.multiply(1));
+        if(!mouse){
+            if(Input.isKeyDown(Keys.W))
+                dir = dir.add(Vector2.up.multiply(1));
 
-        if(Input.isKeyDown(Keys.S))
-            dir = dir.add(Vector2.down);
+            if(Input.isKeyDown(Keys.S))
+                dir = dir.add(Vector2.down);
 
-        if(Input.isKeyDown(Keys.A))
-            dir = dir.add(Vector2.left);
-        if(Input.isKeyDown(Keys.D))
-            dir = dir.add(Vector2.right);
+            if(Input.isKeyDown(Keys.A))
+                dir = dir.add(Vector2.left);
+            if(Input.isKeyDown(Keys.D))
+                dir = dir.add(Vector2.right);
+
+        }
+        else{
+            t.position = Input.getMousePosition();
+        }
 
         rb.addForce(dir.multiply(5));
     }

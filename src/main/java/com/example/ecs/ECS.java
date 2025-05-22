@@ -1,5 +1,6 @@
 package com.example.ecs;
 
+import com.example.Debug;
 import com.example.components.*;
 
 import java.util.*;
@@ -10,6 +11,7 @@ public class ECS {
     Map<Integer, List<Script>> scripts = new HashMap<>();
 
     public <T extends Component> void addComponent(int entityId, T component) {
+        Debug.log("Add component");
         if(component instanceof Script){
             scripts.computeIfAbsent(entityId, k -> new ArrayList<>()).add((Script) component);
         }
@@ -58,54 +60,26 @@ public class ECS {
     @SafeVarargs
     public final Set<Integer> getEntitiesWithComponents(Class<? extends Component>... componentClasses) {
         if (componentClasses.length == 0) {
-            return Collections.emptySet();
+            return Collections.emptySet(); // No components requested
         }
 
-        // For the first component class, collect entities from all stores whose key is assignable to it
-        Set<Integer> result = new HashSet<>();
-        Class<? extends Component> firstClass = componentClasses[0];
-        boolean foundAny = false;
+        // Start with the first component type
+        Map<Integer, Component> firstStore = componentStores.get(componentClasses[0]);
+        if (firstStore == null) return Collections.emptySet();
 
-        for (Class<? extends Component> storedClass : componentStores.keySet()) {
-            if (firstClass.isAssignableFrom(storedClass)) {
-                Map<Integer, Component> store = componentStores.get(storedClass);
-                if (store != null) {
-                    result.addAll(store.keySet());
-                    foundAny = true;
-                }
-            }
-        }
-        if (!foundAny) {
-            return Collections.emptySet();
-        }
+        // Initialize result with the entity IDs from the first component map
+        Set<Integer> result = new HashSet<>(firstStore.keySet());
 
-        // For other component classes, intersect similarly
+        // Intersect with the keys from all other component types
         for (int i = 1; i < componentClasses.length; i++) {
-            Class<? extends Component> compClass = componentClasses[i];
-            Set<Integer> tempSet = new HashSet<>();
-            boolean found = false;
-
-            for (Class<? extends Component> storedClass : componentStores.keySet()) {
-                if (compClass.isAssignableFrom(storedClass)) {
-                    Map<Integer, Component> store = componentStores.get(storedClass);
-                    if (store != null) {
-                        tempSet.addAll(store.keySet());
-                        found = true;
-                    }
-                }
-            }
-
-            if (!found) {
-                return Collections.emptySet();
-            }
-
-            result.retainAll(tempSet);
-            if (result.isEmpty()) {
-                return result;
-            }
+            Map<Integer, Component> store = componentStores.get(componentClasses[i]);
+            if (store == null) return Collections.emptySet(); // No entities have this component
+            result.retainAll(store.keySet());
+            if (result.isEmpty()) return result; // Early exit
         }
 
         return result;
     }
+
 
 }

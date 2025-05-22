@@ -49,25 +49,28 @@ public class RigidbodySystem implements ISystem{
     public void update(Scene scene) {
         ECS ecs = scene.getEcs();
 
-        Set<Integer> entities = ecs.getEntitiesWithComponents(Transform.class, Collider.class, Rigidbody.class);
+        Set<Integer> entities = ecs.getEntitiesWithComponents(Transform.class, Rigidbody.class);
         for (int entityId : entities) {
             Rigidbody rb = ecs.getComponent(entityId, Rigidbody.class);
-            Collider c = ecs.getComponent(entityId, Collider.class);
             Transform t = ecs.getComponent(entityId, Transform.class);
 
             if(rb.useGravity){
                 rb.acceleration = rb.acceleration.add(new Vector2(0,9.82));
             }
-            if(c.isColliding){
+
+            Collider c = ecs.getComponent(entityId, Collider.class);
+            if(c != null && c.isColliding){
+                Transform t2 = ecs.getComponent(c.collisionEntity, Transform.class);
+                Rigidbody rb2 = ecs.getComponent(c.collisionEntity, Rigidbody.class);
                 this.resolveCollision(t,
                                       rb,
                                       c,
-                                      ecs.getComponent(c.collisionEntity, Transform.class),
-                                      ecs.getComponent(c.collisionEntity, Rigidbody.class),
+                                      t2,
+                                      rb2,
                                       ecs.getComponent(c.collisionEntity, Collider.class));
             }
 
-            rb.velocity = rb.velocity.multiply(1-rb.friction);
+            //rb.velocity = rb.velocity.multiply(1-rb.friction);
             rb.velocity = rb.velocity.add(rb.acceleration.multiply(Time.deltaTime));
 
 
