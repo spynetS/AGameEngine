@@ -31,6 +31,13 @@ public class Sprite {
         loadSprite(src);
     }
 
+    public Sprite(String src, Rectangle region) {
+        super();
+        this.src = src;
+        loadSprite(src,region);
+    }
+
+
     public Sprite() {
     }
 
@@ -136,5 +143,5 @@ public class Sprite {
 
         return annimation;
 
-        }
     }
+}

@@ -31,7 +31,7 @@ public class SpriteRenderer extends Renderer {
 
     public Sprite getCurrentSprite() {
         // had a bug when we switch the animations before the spriteIndex updated and it was to big for the new animation
-        if(animations.get(animationIndex).size() < spriteIndex) return animations.get(animationIndex).get(0);
+        if(animations.get(animationIndex).size() <= spriteIndex) return animations.get(animationIndex).get(0);
         return animations.get(animationIndex).get(spriteIndex);
     }
 

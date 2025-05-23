@@ -166,6 +166,7 @@ public class Scene extends JPanel implements Runnable {
     }
 
     public int getEntityId(){
+        entityId++;
         return entityId;
     }
 
