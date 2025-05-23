@@ -58,13 +58,14 @@ public class SpriteRendererSystem implements ISystem {
            double w = t.scale.getX();
            double h = t.scale.getY();
 
+           int inverted = (r.isInverted()) ? -1 : 1;
 
-            g2.drawImage(r.getCurrentSprite().getImage(),
-                         (int)(t.position.getX() - (w / 2)),
-                         (int)(t.position.getY() - (h / 2)),
-                         (int)t.scale.x,
-                         (int)t.scale.y,
-                         null);
+           g2.drawImage(r.getCurrentSprite().getImage(),
+                        (int)(t.position.getX() - (w * inverted / 2)),
+                        (int)(t.position.getY() - (h / 2)),
+                        (int)t.scale.x * inverted,
+                        (int)t.scale.y,
+                        null);
         }
 
     }

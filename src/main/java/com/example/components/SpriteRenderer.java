@@ -20,6 +20,7 @@ import com.example.*;
 public class SpriteRenderer extends Renderer {
     private ArrayList<ArrayList<Sprite>> animations = new ArrayList<>();
     private boolean isInverted = false;
+    public ArrayList<AnimationListener> animationListeners = new ArrayList<>();
     /**
      * This chooses how long a sprite is displayed before next sprite is displayed
      */
@@ -29,6 +30,8 @@ public class SpriteRenderer extends Renderer {
     private int animationIndex = 0;
 
     public Sprite getCurrentSprite() {
+        // had a bug when we switch the animations before the spriteIndex updated and it was to big for the new animation
+        if(animations.get(animationIndex).size() < spriteIndex) return animations.get(animationIndex).get(0);
         return animations.get(animationIndex).get(spriteIndex);
     }
 
@@ -46,6 +49,9 @@ public class SpriteRenderer extends Renderer {
     }
 
     public void onAnimationDone() {
+        for(AnimationListener listener : animationListeners){
+            listener.onAnimationDone();
+        }
     }
 
     public void update(Scene scene) {

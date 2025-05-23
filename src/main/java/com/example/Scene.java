@@ -163,7 +163,6 @@ public class Scene extends JPanel implements Runnable {
         manager.renderSystems(this,g2);
         g2.scale(2,2);
         g2.drawString(String.valueOf(entityId),-200,-200);
-        Debug.log(entityId);
     }
 
     public int getEntityId(){

@@ -4,17 +4,20 @@ package com.example;
 import javax.imageio.ImageIO;
 
 import com.example.Debug;
+import com.example.Vector2;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.IndexColorModel;
+import java.awt.image.RasterFormatException;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
@@ -80,6 +83,20 @@ public class Sprite {
         this.image = sprite;
     }
 
+    public void loadSprite(String filePath, Rectangle region) {
+        Debug.startCount();
+        BufferedImage sprite = null;
+        try {
+            File file = new File(filePath); // Absolute or relative path
+            BufferedImage fullImage = ImageIO.read(file);
+            sprite = fullImage.getSubimage(region.x, region.y, region.width, region.height);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (RasterFormatException e) {
+            System.err.println("Region is outside the bounds of the image: " + e.getMessage());
+        }
+        this.image = sprite;
+    }
 
 
     public void setSrc(final String src) {
@@ -103,4 +120,21 @@ public class Sprite {
     public void setImage(final BufferedImage image) {
         this.image = image;
     }
-}
+
+    public static ArrayList<Sprite> getSprites(String src, Vector2 imageSize, Vector2 spriteAmount, Vector2 startStop){
+        ArrayList<Sprite> annimation = new ArrayList<>();
+        int w = (int)(imageSize.x/spriteAmount.x);
+        int h = (int)(imageSize.y/spriteAmount.y);
+
+        Debug.log(h);
+
+        for(int x = 0; x < spriteAmount.x; x ++){
+            Sprite sprite = new Sprite();
+            sprite.loadSprite(src, new Rectangle(x*w,(int)(startStop.y*h),w,h));
+            annimation.add(sprite);
+        }
+
+        return annimation;
+
+        }
+    }
