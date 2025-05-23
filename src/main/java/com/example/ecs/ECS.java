@@ -19,6 +19,14 @@ public class ECS {
         }
 
     }
+    public void removeAllComponents(int entityId) {
+        for (Map<Integer, Component> store : componentStores.values()) {
+            store.remove(entityId);
+        }
+    }
+    public void removeAllScripts(int entityId){
+        scripts.remove(entityId);
+    }
     public List<Script> getScripts(int entityId) {
         return scripts.getOrDefault(entityId, Collections.emptyList());
     }

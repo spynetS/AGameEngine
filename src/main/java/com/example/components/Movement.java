@@ -19,7 +19,7 @@ public class Movement extends Script implements AnimationListener{
     public void onAnimationDone() {
         SpriteRenderer r = gameObject.getComponent(SpriteRenderer.class);
         if(r.getAnimationIndex() == 4){
-            r.setAnimationIndex(0);
+            gameObject.destroy();
         }
     }
     public void update(double deltaTime){

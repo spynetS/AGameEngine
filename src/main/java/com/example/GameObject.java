@@ -23,5 +23,9 @@ public class GameObject {
         return this.scene.getEcs().getComponent(id, comp);
     }
 
+    public void destroy(){
+        this.scene.getEcs().removeAllComponents(this.id);
+        this.scene.getEcs().removeAllScripts(this.id);
+    }
 
 }
