@@ -36,19 +36,16 @@ public class Movement extends Script implements AnimationListener{
     }
     public void update(double deltaTime){
 
-
-
         Transform t = gameObject.getComponent(Transform.class);
         Vector2 dir = Vector2.zero;
         Rigidbody rb = gameObject.getComponent(Rigidbody.class);
         SpriteRenderer r = gameObject.getComponent(SpriteRenderer.class);
-
-
-        if(!mouse){
             if(Input.isKeyPressed(Keys.SPACE)){
                 t.scale = t.scale.multiply(1.2);
                 r.setAnimationIndex(4);
             }
+
+        if(!mouse){
             if(r.getAnimationIndex() != 4){
                 if(Input.isKeyDown(Keys.W)){
                     dir = dir.add(Vector2.up.multiply(1));

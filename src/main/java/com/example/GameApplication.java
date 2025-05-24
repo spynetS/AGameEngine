@@ -21,6 +21,8 @@ public class GameApplication extends JFrame{
 		selectedScene = newScene;
 		add(newScene, java.awt.BorderLayout.CENTER);
 		newScene.start();
+		validate();
+		repaint();
 	}
 
 }

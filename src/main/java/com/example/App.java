@@ -13,6 +13,7 @@ public class App extends GameApplication {
 		App app = new App();
 		//app.setTitle("Mitt Spel");
 		Scene scene = new Scene(app);
+		scene.setBackground(Color.green);
 
 		GameObject ob = scene.createGameObject();
 		SpriteRenderer spriteRenderer = new SpriteRenderer();
@@ -44,11 +45,11 @@ public class App extends GameApplication {
 		ob.addComponent(spriteRenderer);
 		ob.getComponent(Transform.class).scale = new Vector2(400,400);
 		ob.addComponent(new Rigidbody());
-		Movement m = new Movement(false);
+		Movement m = new Movement(true);
 		ob.addComponent(m);
 		spriteRenderer.animationListeners.add(m);
 
-		Debug.showWhere = true;
+		//Debug.showWhere = true;
 
 		app.setSelectedScene(scene);
 	}
@@ -57,7 +58,7 @@ public class App extends GameApplication {
 		public TestObject(Scene scene){
 			super(scene);
 			addComponent(new ShapeRenderer());
-			addComponent(new Movement(true));
+			addComponent(new Movement(false));
 			Rigidbody r = new Rigidbody();
 			addComponent(r);
 			r.mass = 1;

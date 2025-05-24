@@ -59,13 +59,14 @@ public class SpriteRenderer extends Renderer {
         if (timeOnLastSprite > timeOnEachSprite) {
             // if the sprite index is greater then the amount of sprites
             // the animation is done else we set next sprite in the animation
-            if (spriteIndex + 1 == sprites.size()) {
+            if (spriteIndex + 1 >= sprites.size()) {
                 spriteIndex = 0;
                 onAnimationDone();
             } else spriteIndex++;
             timeOnLastSprite = -1;
         }
         timeOnLastSprite += (Time.deltaTime * 1000);
+        Debug.log(spriteIndex);
     }
 
     public void render(Scene scene, Graphics2D g) {
