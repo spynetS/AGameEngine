@@ -133,8 +133,6 @@ public class Sprite {
         int w = (int)(imageSize.x/spriteAmount.x);
         int h = (int)(imageSize.y/spriteAmount.y);
 
-        Debug.log(h);
-
         for(int x = 0; x < spriteAmount.x; x ++){
             Sprite sprite = new Sprite();
             sprite.loadSprite(src, new Rectangle(x*w,(int)(startStop.y*h),w,h));

@@ -66,7 +66,6 @@ public class SpriteRenderer extends Renderer {
             timeOnLastSprite = -1;
         }
         timeOnLastSprite += (Time.deltaTime * 1000);
-        Debug.log(spriteIndex);
     }
 
     public void render(Scene scene, Graphics2D g) {

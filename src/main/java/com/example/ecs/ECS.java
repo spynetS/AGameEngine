@@ -80,7 +80,8 @@ public class ECS {
         // Intersect with the keys from all other component types
         for (int i = 1; i < componentClasses.length; i++) {
             Map<Integer, Component> store = componentStores.get(componentClasses[i]);
-            if (store == null) return Collections.emptySet(); // No entities have this component
+            if (store == null) return Collections.
+                                   emptySet(); // No entities have this component
             result.retainAll(store.keySet());
             if (result.isEmpty()) return result; // Early exit
         }

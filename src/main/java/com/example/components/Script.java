@@ -4,8 +4,9 @@ import com.example.GameObject;
 import com.example.Scene;
 import com.example.Vector2;
 import com.example.ecs.ECS;
+import com.example.systems.ICollision;
 
-public class Script extends Component{
+public class Script extends Component implements ICollision {
 
     protected GameObject gameObject;
 
@@ -27,7 +28,7 @@ public class Script extends Component{
 
     }
 
-    public void onCollision(int entity){
+    @Override
+    public void onCollision(int entity) {  }
 
-    }
 }
