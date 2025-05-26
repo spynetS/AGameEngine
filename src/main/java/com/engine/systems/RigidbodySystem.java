@@ -59,15 +59,18 @@ public class RigidbodySystem implements ISystem{
             }
 
             Collider c = ecs.getComponent(entityId, Collider.class);
-            if(c != null && c.isColliding){
+            if(c != null && c.isColliding && !c.isTrigger){
                 Transform t2 = ecs.getComponent(c.collisionEntity, Transform.class);
                 Rigidbody rb2 = ecs.getComponent(c.collisionEntity, Rigidbody.class);
-                this.resolveCollision(t,
+                if (rb2 != null){
+                    this.resolveCollision(t,
                                       rb,
                                       c,
                                       t2,
                                       rb2,
                                       ecs.getComponent(c.collisionEntity, Collider.class));
+                }
+
             }
 
             rb.velocity = rb.velocity.multiply(1-rb.friction);

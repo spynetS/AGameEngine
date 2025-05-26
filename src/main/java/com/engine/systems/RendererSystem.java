@@ -39,7 +39,7 @@ public class RendererSystem implements ISystem {
             g2.fill(new Rectangle2D.Double(
                                            t.position.getX() - (w / 2),
                                            t.position.getY() - (h / 2),
-                                           w, h
+                                           w+1, h+1
                                            ));
 
         }

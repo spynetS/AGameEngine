@@ -35,18 +35,25 @@ public class Scene extends JPanel implements Runnable {
     private int entityId = 0;
     private Vector2 cameraPosition = new Vector2(0,0);
 
+    public double zoom = 0.8;
+
     private ECS ecs = new ECS();
     private SystemsManager manager = new SystemsManager();
-
-
-    public Scene(){}
 
     public Scene(GameApplication application){
         this.application = application;
         setDoubleBuffered(true); // helps prevent flickering
         initInput();
+        cameraPosition = new Vector2(application.getWidth()/2,application.getHeight()/2);
     }
 
+    public Vector2 getCameraPosition() {
+        return cameraPosition;
+    }
+
+    public void setCameraPosition(Vector2 cameraPosition) {
+        this.cameraPosition = cameraPosition;
+    }
     private void initInput(){
         //setLayout(new GridLayout(0, 1));
         setBackground(Color.WHITE);
@@ -118,10 +125,10 @@ public class Scene extends JPanel implements Runnable {
         int designHeight = 1080;
         double scaleX = (double) w / designWidth;
         double scaleY = (double) h / designHeight;
-        double scale = Math.min(scaleX, scaleY) * 0.5;
+        double scale = Math.min(scaleX, scaleY) * zoom;
 
-        double tx = w / 2.0 + cameraPosition.getX();
-        double ty = h / 2.0 + cameraPosition.getY();
+        double tx = cameraPosition.getX();
+        double ty = cameraPosition.getY();
 
         double wx = (mousePoint.getX() - tx) / scale;
         double wy = (mousePoint.getY() - ty) / scale;
@@ -140,11 +147,11 @@ public class Scene extends JPanel implements Runnable {
         // Calculate uniform scale to fit design inside panel
         double scaleX = (double) w / designWidth;
         double scaleY = (double) h / designHeight;
-        double scale = Math.min(scaleX, scaleY)*0.5;
+        double scale = Math.min(scaleX, scaleY)*zoom;
 
         // Move origin to center of panel
-        g2.translate(w / 2.0+cameraPosition.getX(),
-                     h / 2.0+cameraPosition.getY());
+        g2.translate(cameraPosition.getX(),
+                     cameraPosition.getY());
 
         // Scale uniformly
         g2.scale(scale, scale);
@@ -155,7 +162,7 @@ public class Scene extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
-        //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         initGraphics2D(g2);
 
         Input.setMousePosition(screenToWorld(Input.getMousePositionOnCanvas()));
@@ -180,6 +187,8 @@ public class Scene extends JPanel implements Runnable {
         for(Script script : ecs.getAllComponentsOfType(Script.class)){
             script.start();
         }
+
+
 
         running = true;
         gameThread = new Thread(this);

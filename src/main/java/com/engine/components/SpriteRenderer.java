@@ -3,6 +3,7 @@ package com.engine.components;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.time.temporal.IsoFields;
 import java.util.ArrayList;
 
 import com.engine.*;
@@ -21,6 +22,8 @@ public class SpriteRenderer extends Renderer {
     private ArrayList<ArrayList<Sprite>> animations = new ArrayList<>();
     private boolean isInverted = false;
     public ArrayList<AnimationListener> animationListeners = new ArrayList<>();
+    private boolean keepAspect = false;
+
     /**
      * This chooses how long a sprite is displayed before next sprite is displayed
      */
@@ -48,10 +51,22 @@ public class SpriteRenderer extends Renderer {
         animations.get(animationIndex).add(sprite);
     }
 
+    public boolean isKeepAspect() {
+        return keepAspect;
+    }
+
+    public void setKeepAspect(boolean keepAspect) {
+        this.keepAspect = keepAspect;
+    }
+
     public void onAnimationDone() {
         for(AnimationListener listener : animationListeners){
             listener.onAnimationDone();
         }
+    }
+
+    public void removeSprite(int index){
+        animations.get(0).remove(index);
     }
 
     public void update(Scene scene) {

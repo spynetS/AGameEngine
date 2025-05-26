@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import com.engine.Debug;
 import com.engine.GameObject;
 import com.engine.Scene;
-import com.engine.Sprite;
+import com.engine.components.*;
 import com.engine.Vector2;
 import com.engine.ecs.ECS;
 import com.engine.input.Input;

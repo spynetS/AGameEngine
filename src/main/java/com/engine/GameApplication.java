@@ -13,7 +13,6 @@ public class GameApplication extends JFrame{
 		this.setSize(1920/2,1080/2);
 		this.setVisible(true);
 		System.setProperty("sun.java2d.opengl", "true");
-
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 

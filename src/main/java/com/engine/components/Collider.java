@@ -12,7 +12,14 @@ public class Collider extends Component{
     public Vector2 size = new Vector2();
     public boolean isColliding = false;
 
+    public boolean isTrigger = false;
+
     public int collisionEntity;
+
+    public Collider(){}
+    public Collider(boolean isTrigger){
+        this.isTrigger = isTrigger;
+    }
 
     public Rectangle2D getShape(Transform t){
 

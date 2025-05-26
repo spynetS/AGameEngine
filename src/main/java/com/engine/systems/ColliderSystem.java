@@ -24,6 +24,14 @@ public class ColliderSystem implements ISystem {
         if (scriptB != null) scriptB.onCollision(entityA);
     }
 
+    public void onTrigger(ECS ecs, int entityA, int entityB) {
+
+        Script scriptA = ecs.getComponent(entityA, Script.class);
+        if (scriptA != null) scriptA.onTrigger(entityB);
+
+        Script scriptB = ecs.getComponent(entityB, Script.class);
+        if (scriptB != null) scriptB.onTrigger(entityA);
+    }
 
     @Override
     public void update(Scene scene) {
@@ -38,6 +46,8 @@ public class ColliderSystem implements ISystem {
                 Transform t2 = ecs.getComponent(entityId2, Transform.class);
                 Collider r2 = ecs.getComponent(entityId2, Collider.class);
 
+                if(r2==null || r1 ==null) continue;
+
                 Rectangle2D shape1 = r1.getShape(t1);
                 Rectangle2D shape2 = r2.getShape(t2);
 
@@ -45,7 +55,10 @@ public class ColliderSystem implements ISystem {
                 r2.isColliding = shape2.intersects(shape1);
 
                 if(r1.isColliding){
-                    onCollision(ecs, entityId, entityId2);
+                    if(r1.isTrigger)
+                        onTrigger(ecs, entityId, entityId2);
+                    else
+                        onCollision(ecs, entityId, entityId2);
                     r1.collisionEntity = entityId2;
                     r2.collisionEntity = entityId;
                 }
@@ -55,22 +68,23 @@ public class ColliderSystem implements ISystem {
 
     @Override
     public void render(Scene scene, Graphics2D g2) {
-        ECS ecs = scene.getEcs();
+        // ECS ecs = scene.getEcs();
 
-        Set<Integer> entities = ecs.getEntitiesWithComponents(Transform.class, Collider.class);
-        for (int entityId : entities) {
-            Transform t = ecs.getComponent(entityId, Transform.class);
-            Collider r = ecs.getComponent(entityId, Collider.class);
+        // Set<Integer> entities = ecs.getEntitiesWithComponents(Transform.class, Collider.class);
+        // for (int entityId : entities) {
+        //     Transform t = ecs.getComponent(entityId, Transform.class);
+        //     Collider r = ecs.getComponent(entityId, Collider.class);
+        //     if(r==null) continue;
 
-            Color c = g2.getColor();
-            if(!r.isColliding)
-                g2.setColor(Color.green);
-            else
-                g2.setColor(Color.red);
-            g2.draw(r.getShape(t));
-            g2.setColor(c);
+        //     Color c = g2.getColor();
+        //     if(!r.isColliding)
+        //         g2.setColor(Color.green);
+        //     else
+        //         g2.setColor(Color.red);
+        //     g2.draw(r.getShape(t));
+        //     g2.setColor(c);
 
-        }
+        // }
 
     }
 }

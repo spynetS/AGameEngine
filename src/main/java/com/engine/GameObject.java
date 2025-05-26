@@ -5,11 +5,17 @@ import com.engine.components.*;
 public class GameObject {
     private int id = 0;
     public Scene scene;
+    public Transform transform;
+
+    public int getId() {
+        return id;
+    }
 
     public GameObject(Scene scene){
         this.scene = scene;
         this.id = scene.getEntityId();
-        addComponent(new Transform());
+        transform = new Transform();
+        addComponent(transform);
     }
 
     public Component addComponent(Component component){

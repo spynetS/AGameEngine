@@ -31,4 +31,7 @@ public class Script extends Component implements ICollision {
     @Override
     public void onCollision(int entity) {  }
 
+    @Override
+    public void onTrigger(int entity) {    }
+
 }

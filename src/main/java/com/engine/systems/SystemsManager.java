@@ -11,8 +11,8 @@ public class SystemsManager {
     public SystemsManager(){
         // Register systems
         systems.add(new ColliderSystem());
-        systems.add(new RendererSystem());
         systems.add(new SpriteRendererSystem());
+        systems.add(new RendererSystem());
         systems.add(new RigidbodySystem());
     }
 

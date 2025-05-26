@@ -9,7 +9,7 @@ public class Rigidbody extends Component{
 
     public boolean useGravity = false;
     public double mass = 1;
-    public double friction = 0.01;
+    public double friction = 0.001;
 
     public Vector2 velocity = new Vector2();
     public Vector2 acceleration = new Vector2();
