@@ -1,10 +1,10 @@
-package com.example;
+package com.engine;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
 import javax.swing.JFrame;
 
-import com.example.GameApplication;
+import com.engine.GameApplication;
 
 public class AppTest {
 

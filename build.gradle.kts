@@ -3,11 +3,11 @@ plugins {
     application
 }
 
-group = "com.example"
+group = "com.engine"
 version = "1.0.0"
 
 application {
-    mainClass.set("com.example.App")
+    mainClass.set("com.engine.App")
 }
 
 repositories {
